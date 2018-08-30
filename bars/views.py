@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from bars.models import Bars
 from bars.serializers import BarsSerializer
 from rest_framework.parsers import JSONParser
+import datetime
 
 
 def index(request):
@@ -32,9 +33,10 @@ def bars_set(request):
     if request.GET.keys() != {'symbol', 'timeframe', 'timestamp', 'open', 'close', 'high', 'low', 'tick_volume'}:
         return HttpResponse("You set not all fields:  symbol, timeframe, timestamp, open, close, high, low, tick_volume")
     else:
+        ts = datetime.datetime.utcfromtimestamp(int(request.GET['timestamp'])).strftime('%Y-%m-%d %H:%M:%S')
         bar = Bars(symbol = request.GET['symbol'],
                    timeframe = request.GET['timeframe'],
-                   timestamp = request.GET['timestamp'],
+                   timestamp = ts,
                    open = request.GET['open'],
                    close = request.GET['close'],
                    high = request.GET['high'],

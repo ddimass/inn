@@ -33,14 +33,18 @@ def bars_set(request):
     if request.GET.keys() != {'symbol', 'timeframe', 'timestamp', 'open', 'close', 'high', 'low', 'tick_volume'}:
         return HttpResponse("You set not all fields:  symbol, timeframe, timestamp, open, close, high, low, tick_volume")
     else:
+
         ts = datetime.utcfromtimestamp(int(request.GET['timestamp'])).strftime('%Y-%m-%d %H:%M:%S')
-        bar = Bars(symbol = request.GET['symbol'],
-                   timeframe = request.GET['timeframe'],
-                   timestamp = ts,
-                   open = request.GET['open'],
-                   close = request.GET['close'],
-                   high = request.GET['high'],
-                   low = request.GET['low'],
-                   tick_volume = request.GET['tick_volume'])
-        bar.save()
-        return HttpResponse(request.GET['symbol'] + ' saved')
+        if (Bars.objects.filter(timeframe=request.GET['timeframe']).filter(symbol=request.GET['symbol']).filter(timestamp=ts)):
+            return HttpResponse(status=208)
+        else:
+            bar = Bars(symbol = request.GET['symbol'],
+                       timeframe = request.GET['timeframe'],
+                       timestamp = ts,
+                       open = request.GET['open'],
+                       close = request.GET['close'],
+                       high = request.GET['high'],
+                       low = request.GET['low'],
+                       tick_volume = request.GET['tick_volume'])
+            bar.save()
+            return HttpResponse(status=201)

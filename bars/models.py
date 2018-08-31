@@ -21,5 +21,5 @@ class Bars(models.Model):
     tick_volume = models.IntegerField()
 
     def __str__(self):
-        return self.symbol
+        return self.symbol + " - " + str(self.timeframe) + " - " + str(self.timestamp)
 

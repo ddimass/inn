@@ -1,3 +1,7 @@
 django
 mysql-connector-python
 djangorestframework
+keras
+tensorflow
+
+
